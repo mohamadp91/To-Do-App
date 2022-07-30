@@ -9,7 +9,7 @@
 
 
     <EditText
-        android:id="@+id/todoTitle"
+        android:id="@+id/current_todoTitle"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="24dp"
@@ -25,7 +25,7 @@
 
     <Spinner
         android:paddingStart="16dp"
-        android:id="@+id/spinner"
+        android:id="@+id/current_priority"
         android:background="@drawable/custom_input"
         android:entries="@array/priority"
         android:layout_width="0dp"
@@ -34,10 +34,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todoTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/current_todoTitle" />
 
     <EditText
-        android:id="@+id/description"
+        android:id="@+id/current_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -53,6 +53,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner" />
+        app:layout_constraintTop_toBottomOf="@id/current_priority" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
