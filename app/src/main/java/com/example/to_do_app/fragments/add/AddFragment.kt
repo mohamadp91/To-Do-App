@@ -17,10 +17,14 @@ class AddFragment : Fragment(), MenuProvider {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add, container, false)
 
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        configMenu()
 
         return view
+    }
+
+    private fun configMenu(){
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -28,7 +32,14 @@ class AddFragment : Fragment(), MenuProvider {
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return false
+        when(menuItem){
+            (R.id.submit as MenuItem) -> saveToDO()
+        }
+        return true
+    }
+
+    private fun saveToDO() {
+        println("hey")
     }
 
 }
