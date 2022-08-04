@@ -14,6 +14,7 @@
     <string name="sort_by">sort by</string>
     <string name="submit">submit</string>
     <string name="delete">delete</string>
+    <string name="priorities">Priorities</string>
     <string-array name="priority">
         <item>High Priority</item>
         <item>Medium Priority</item>

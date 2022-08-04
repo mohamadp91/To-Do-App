@@ -1,6 +1,6 @@
 package com.example.to_do_app.data.db
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import com.example.to_do_app.data.models.Priority
 
 class Converter {

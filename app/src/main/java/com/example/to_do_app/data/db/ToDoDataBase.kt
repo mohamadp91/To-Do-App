@@ -1,10 +1,10 @@
 package com.example.to_do_app.data.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.to_do_app.data.models.ToDoModel
 
 @Database(entities = [ToDoModel::class], version = 1, exportSchema = false)
@@ -19,21 +19,16 @@ abstract class ToDoDataBase : RoomDatabase() {
         private var INSTANCE: ToDoDataBase? = null
 
         fun getDatabase(context: Context): ToDoDataBase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
-            }
-
-            synchronized(this) {
+            return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    context,
                     ToDoDataBase::class.java,
                     "todo_db"
-                ).build()
+                )
+                    .build()
                 INSTANCE = instance
-                return instance
+                instance
             }
-
         }
     }
 }
