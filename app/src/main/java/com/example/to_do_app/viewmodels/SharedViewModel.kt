@@ -4,16 +4,25 @@ import android.app.Application
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.example.to_do_app.R
 import com.example.to_do_app.data.models.Priority
+import com.example.to_do_app.data.models.ToDoModel
 import com.google.android.material.textfield.TextInputLayout
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
     val items = listOf("High Priority", "Medium Priority", "Low Priority")
+
+    val isDatabaseEmpty = MutableLiveData<Boolean>(true)
+
+    fun checkIsDatabaseEmpty(toDoList : List<ToDoModel>){
+        isDatabaseEmpty.value = toDoList.isEmpty()
+    }
 
     fun parsePriority(str: String): Priority {
         return when (str) {
@@ -23,14 +32,14 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun verifyInputs(vararg inputs: TextInputLayout): Boolean {
+    fun verifyInputs(vararg inputs: EditText): Boolean {
         return inputs.all {
             hasError(it)
         }
     }
 
-    private fun hasError(input: TextInputLayout): Boolean {
-        return if (!input.editText?.text?.trim().isNullOrEmpty()) {
+    private fun hasError(input: EditText): Boolean {
+        return if (!input.text?.trim().isNullOrEmpty()) {
             input.error = null
             true
         } else {
@@ -39,6 +48,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    infix fun getValue(input: TextInputLayout): String = input.editText?.text.toString()
+    infix fun getValue(input: EditText): String = input.text.toString()
 
 }

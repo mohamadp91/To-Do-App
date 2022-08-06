@@ -18,9 +18,26 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
 
     val getAllData: LiveData<List<ToDoModel>> = repository.getAllData
 
-    fun insertData(toDoModel: ToDoModel){
-        viewModelScope.launch(Dispatchers.IO){
+    fun insertData(toDoModel: ToDoModel) {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.insert(toDoModel)
+        }
+    }
+
+    fun updateToDo(toDoModel: ToDoModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateToDo(toDoModel)
+        }
+    }
+
+    fun deleteToDO(id: ToDoModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteToDO(id)
+        }
+    }
+    fun deleteAllToDos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllToDos()
         }
     }
 }
