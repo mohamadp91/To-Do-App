@@ -4,6 +4,7 @@ import android.app.Application
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
@@ -23,14 +24,14 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun verifyInputs(vararg inputs: TextInputLayout): Boolean {
+    fun verifyInputs(vararg inputs: EditText): Boolean {
         return inputs.all {
             hasError(it)
         }
     }
 
-    private fun hasError(input: TextInputLayout): Boolean {
-        return if (!input.editText?.text?.trim().isNullOrEmpty()) {
+    private fun hasError(input: EditText): Boolean {
+        return if (!input.text?.trim().isNullOrEmpty()) {
             input.error = null
             true
         } else {
@@ -39,6 +40,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    infix fun getValue(input: TextInputLayout): String = input.editText?.text.toString()
+    infix fun getValue(input: EditText): String = input.text.toString()
 
 }

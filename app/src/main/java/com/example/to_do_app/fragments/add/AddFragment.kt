@@ -70,7 +70,7 @@ class AddFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.submit -> {
-                if (sharedViewModel.verifyInputs(titleInput, priorityInput, descriptionInput)) {
+                if (sharedViewModel.verifyInputs(titleInput.editText!!, priorityInput.editText!!, descriptionInput.editText!!)) {
                     saveToDO()
                     findNavController().navigate(R.id.action_addFragment_to_listFragment)
                     return true
@@ -83,9 +83,9 @@ class AddFragment : Fragment(), MenuProvider {
     private fun saveToDO() {
         val todo = ToDoModel(
             0,
-            sharedViewModel getValue titleInput,
-            sharedViewModel.parsePriority(sharedViewModel getValue priorityInput),
-            sharedViewModel getValue descriptionInput
+            sharedViewModel getValue titleInput.editText!!,
+            sharedViewModel.parsePriority(sharedViewModel getValue priorityInput.editText!!),
+            sharedViewModel getValue descriptionInput.editText!!
         )
         todoViewModel.insertData(todo)
     }

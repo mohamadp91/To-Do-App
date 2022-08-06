@@ -5,10 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.to_do_app.R
 import com.example.to_do_app.data.models.Priority
 import com.example.to_do_app.data.models.ToDoModel
+import com.example.to_do_app.fragments.list.ListFragmentDirections
 import com.google.android.material.textview.MaterialTextView
 
 class TodoAdapter : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
@@ -31,6 +33,11 @@ class TodoAdapter : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
             titleTxt.text = toDo.title
             descriptionTxt.text = toDo.description
             colorIndicator(toDo.priority, this)
+        }
+
+        holder.itemView.setOnClickListener {
+            val action = ListFragmentDirections.actionListFragmentToUpdateFragment(toDo)
+            it.findNavController().navigate(action)
         }
 
     }
@@ -62,5 +69,10 @@ class TodoAdapter : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
         val titleTxt = itemView.findViewById<MaterialTextView>(R.id.title_txt)!!
         val priorityIndicator = itemView.findViewById<CardView>(R.id.priority_indicator)!!
         val descriptionTxt = itemView.findViewById<MaterialTextView>(R.id.description_txt)!!
+
+        init {
+            itemView.isClickable = true
+            itemView.isFocusable = true
+        }
     }
 }

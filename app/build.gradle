@@ -3,6 +3,12 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
+
+    // safe args plugin
+    id 'androidx.navigation.safeargs.kotlin'
+
+    // for parcelize identifiers
+    id 'kotlin-parcelize'
 }
 
 android {
