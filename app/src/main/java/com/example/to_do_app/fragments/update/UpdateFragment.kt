@@ -1,9 +1,11 @@
 package com.example.to_do_app.fragments.update
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -65,9 +67,12 @@ class UpdateFragment : Fragment(), MenuProvider {
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.menu_update_todo -> updateItem()
+            R.id.menu_update_todo -> {
+                updateItem()
+                findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+            }
+            R.id.menu_delete -> confirmDeleteItem()
         }
-        findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         return false
     }
 
@@ -81,5 +86,19 @@ class UpdateFragment : Fragment(), MenuProvider {
             )
             toDoViewModel.updateToDo(toDo)
         }
+    }
+
+    private fun confirmDeleteItem() {
+        val alertDialog = AlertDialog
+            .Builder(requireContext())
+            .setPositiveButton("Yes") { _, _ ->
+                toDoViewModel.deleteToDO(selectedToDo)
+                Toast.makeText(requireContext(), "Successfully removed", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+            }
+            .setNegativeButton("No") { _, _ -> }
+        alertDialog.setTitle("Delete ${selectedToDo.title}")
+        alertDialog.setMessage("Are you sure to remove ${selectedToDo.title}")
+        alertDialog.create().show()
     }
 }
