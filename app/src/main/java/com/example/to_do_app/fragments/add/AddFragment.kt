@@ -84,7 +84,7 @@ class AddFragment : Fragment(), MenuProvider {
         val todo = ToDoModel(
             0,
             sharedViewModel getValue titleInput,
-            sharedViewModel.parsePriority(sharedViewModel getValue titleInput),
+            sharedViewModel.parsePriority(sharedViewModel getValue priorityInput),
             sharedViewModel getValue descriptionInput
         )
         todoViewModel.insertData(todo)
