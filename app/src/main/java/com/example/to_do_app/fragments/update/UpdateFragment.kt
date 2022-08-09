@@ -15,10 +15,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.to_do_app.R
 import com.example.to_do_app.data.models.ToDoModel
+import com.example.to_do_app.databinding.FragmentUpdateBinding
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
 
 class UpdateFragment : Fragment(), MenuProvider {
+
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!!
 
     private val args: UpdateFragmentArgs by navArgs()
     private val toDoViewModel: ToDoViewModel by activityViewModels()
@@ -31,34 +35,29 @@ class UpdateFragment : Fragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_update, container, false)
+    ): View {
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
 
         selectedToDo = args.toDoModel
 
+        binding.currentToDo = selectedToDo
+
+        setUpViews()
+
         setUpdateMenu()
 
-        setData(view, selectedToDo)
+        return binding.root
+    }
 
-        return view
+    private fun setUpViews() {
+        currentTitle = binding.currentTodoTitle
+        spinnerPriority = binding.currentPriority
+        currentDescription = binding.currentDescription
     }
 
     private fun setUpdateMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun setData(view: View, todo: ToDoModel) {
-        currentTitle = view.findViewById(R.id.current_todoTitle)
-        spinnerPriority = view.findViewById(R.id.current_priority)
-        currentDescription = view.findViewById(R.id.current_description)
-
-        todo.apply {
-            currentTitle.setText(title)
-            spinnerPriority.setSelection(priority.ordinal)
-            currentDescription.setText(description)
-        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -100,5 +99,10 @@ class UpdateFragment : Fragment(), MenuProvider {
         alertDialog.setTitle("Delete ${selectedToDo.title}")
         alertDialog.setMessage("Are you sure to remove ${selectedToDo.title}")
         alertDialog.create().show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

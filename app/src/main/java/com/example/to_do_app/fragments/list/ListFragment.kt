@@ -1,28 +1,26 @@
 package com.example.to_do_app.fragments.list
 
 import android.app.AlertDialog
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.to_do_app.R
 import com.example.to_do_app.adapter.TodoAdapter
 import com.example.to_do_app.data.models.ToDoModel
+import com.example.to_do_app.databinding.FragmentListBinding
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListFragment : Fragment(), MenuProvider {
+
+    private var _binding: FragmentListBinding? = null
+    private val binding get() = _binding!!
 
     private val todoAdapter: TodoAdapter by lazy { TodoAdapter() }
     private val toDoViewModel: ToDoViewModel by activityViewModels()
@@ -33,27 +31,25 @@ class ListFragment : Fragment(), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
+        _binding = FragmentListBinding.inflate(inflater, container, false)
 
-        configNavigateListeners(view)
+        configNavigateListeners()
+
+        binding.lifecycleOwner = this
+        binding.sharedViewModel = sharedViewModel
 
         configMenu()
 
         configToDoObservers()
 
-        configRecyclerView(view)
+        configRecyclerView()
 
-        return view
+        return binding.root
     }
 
 
-    private fun configNavigateListeners(view: View) {
-        view.findViewById<FloatingActionButton>(R.id.fab)
-            .setOnClickListener {
-                it.findNavController().navigate(R.id.action_listFragment_to_addFragment)
-            }
-
-        view.findViewById<ConstraintLayout>(R.id.list_layout).setOnClickListener {
+    private fun configNavigateListeners() {
+        binding.listLayout.setOnClickListener {
             it.findNavController().navigate(R.id.action_listFragment_to_updateFragment)
         }
 
@@ -78,18 +74,18 @@ class ListFragment : Fragment(), MenuProvider {
     }
 
     private fun updateScreenByTodos() {
-        if (toDoModels.isEmpty()) {
-            view?.findViewById<ImageView>(R.id.no_data_image)?.visibility = View.VISIBLE
-            view?.findViewById<TextView>(R.id.no_data_text)?.visibility = View.VISIBLE
-        } else {
-            view?.findViewById<ImageView>(R.id.no_data_image)?.visibility = View.GONE
-            view?.findViewById<TextView>(R.id.no_data_text)?.visibility = View.GONE
-        }
+//        if (toDoModels.isEmpty()) {
+//            binding.noDataImage.visibility = View.VISIBLE
+//            binding.noDataText.visibility = View.VISIBLE
+//        } else {
+//            binding.noDataImage.visibility = View.GONE
+//            binding.noDataText.visibility = View.GONE
+//        }
     }
 
-    private fun configRecyclerView(view: View) {
+    private fun configRecyclerView() {
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView = binding.recyclerView
 
         recyclerView.apply {
             adapter = todoAdapter
@@ -124,4 +120,8 @@ class ListFragment : Fragment(), MenuProvider {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
