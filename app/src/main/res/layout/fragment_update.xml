@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="currentToDo"
+            type="com.example.to_do_app.data.models.ToDoModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,21 +25,23 @@
             android:background="@drawable/custom_input"
             android:ems="10"
             android:hint="@string/Title"
-            android:paddingStart="24dp"
             android:inputType="textPersonName"
+            android:paddingStart="24dp"
+            android:text="@{currentToDo.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:paddingStart="16dp"
             android:id="@+id/current_priority"
-            android:background="@drawable/custom_input"
-            android:entries="@array/priority"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/custom_input"
+            android:entries="@array/priority"
+            android:paddingStart="16dp"
+            android:selectedItemPosition="@{currentToDo.priority.ordinal()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,14 +52,15 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/custom_input"
+            android:ems="10"
+            android:gravity="top|start"
             android:hint="@string/description"
+            android:inputType="textMultiLine"
             android:paddingStart="24dp"
             android:paddingTop="16dp"
-            android:ems="10"
             android:paddingEnd="24dp"
-            android:gravity="top|start"
-            android:inputType="textMultiLine"
-            android:background="@drawable/custom_input"
+            android:text="@{currentToDo.description}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

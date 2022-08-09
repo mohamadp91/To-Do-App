@@ -35,33 +35,29 @@ class UpdateFragment : Fragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
 
         selectedToDo = args.toDoModel
 
+        binding.currentToDo = selectedToDo
+
+        setUpViews()
+
         setUpdateMenu()
 
-        setData(selectedToDo)
-
         return binding.root
+    }
+
+    private fun setUpViews() {
+        currentTitle = binding.currentTodoTitle
+        spinnerPriority = binding.currentPriority
+        currentDescription = binding.currentDescription
     }
 
     private fun setUpdateMenu() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
-    private fun setData(todo: ToDoModel) {
-        currentTitle = binding.currentTodoTitle
-        spinnerPriority = binding.currentPriority
-        currentDescription = binding.currentDescription
-
-        todo.apply {
-            currentTitle.setText(title)
-            spinnerPriority.setSelection(priority.ordinal)
-            currentDescription.setText(description)
-        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
