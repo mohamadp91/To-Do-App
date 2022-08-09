@@ -15,10 +15,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.to_do_app.R
 import com.example.to_do_app.data.models.ToDoModel
+import com.example.to_do_app.databinding.FragmentUpdateBinding
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
 
 class UpdateFragment : Fragment(), MenuProvider {
+
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!!
 
     private val args: UpdateFragmentArgs by navArgs()
     private val toDoViewModel: ToDoViewModel by activityViewModels()
@@ -32,16 +36,15 @@ class UpdateFragment : Fragment(), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_update, container, false)
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
 
         selectedToDo = args.toDoModel
 
         setUpdateMenu()
 
-        setData(view, selectedToDo)
+        setData(selectedToDo)
 
-        return view
+        return binding.root
     }
 
     private fun setUpdateMenu() {
@@ -49,10 +52,10 @@ class UpdateFragment : Fragment(), MenuProvider {
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun setData(view: View, todo: ToDoModel) {
-        currentTitle = view.findViewById(R.id.current_todoTitle)
-        spinnerPriority = view.findViewById(R.id.current_priority)
-        currentDescription = view.findViewById(R.id.current_description)
+    private fun setData(todo: ToDoModel) {
+        currentTitle = binding.currentTodoTitle
+        spinnerPriority = binding.currentPriority
+        currentDescription = binding.currentDescription
 
         todo.apply {
             currentTitle.setText(title)
@@ -100,5 +103,10 @@ class UpdateFragment : Fragment(), MenuProvider {
         alertDialog.setTitle("Delete ${selectedToDo.title}")
         alertDialog.setMessage("Are you sure to remove ${selectedToDo.title}")
         alertDialog.create().show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

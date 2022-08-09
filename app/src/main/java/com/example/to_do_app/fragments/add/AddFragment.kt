@@ -2,9 +2,7 @@ package com.example.to_do_app.fragments.add
 
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -13,11 +11,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.to_do_app.R
 import com.example.to_do_app.data.models.ToDoModel
+import com.example.to_do_app.databinding.FragmentAddBinding
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
 import com.google.android.material.textfield.TextInputLayout
 
 class AddFragment : Fragment(), MenuProvider {
+
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var titleInput: TextInputLayout
     private lateinit var priorityInput: TextInputLayout
@@ -30,16 +32,15 @@ class AddFragment : Fragment(), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_add, container, false)
+        _binding = FragmentAddBinding.inflate(inflater, container, false)
 
         configMenu()
 
-        configPriorityList(view)
+        configPriorityList()
 
-        findViewsById(view)
+        setUpViews()
 
-        return view
+        return binding.root
     }
 
     private fun configMenu() {
@@ -47,20 +48,19 @@ class AddFragment : Fragment(), MenuProvider {
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun configPriorityList(view: View) {
+    private fun configPriorityList() {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, sharedViewModel.items)
 
-        view.findViewById<AutoCompleteTextView>(R.id.autoCompleteText)
-            ?.apply {
-                setAdapter(adapter)
+        binding.autoCompleteText.apply {
+            setAdapter(adapter)
         }
 
     }
 
-    private fun findViewsById(view: View) {
-        titleInput = view.findViewById(R.id.todoTitle)
-        priorityInput = view.findViewById(R.id.priorityMenu)
-        descriptionInput = view.findViewById(R.id.description)
+    private fun setUpViews() {
+        titleInput = binding.todoTitle
+        priorityInput = binding.priorityMenu
+        descriptionInput = binding.description
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -70,7 +70,12 @@ class AddFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.submit -> {
-                if (sharedViewModel.verifyInputs(titleInput.editText!!, priorityInput.editText!!, descriptionInput.editText!!)) {
+                if (sharedViewModel.verifyInputs(
+                        titleInput.editText!!,
+                        priorityInput.editText!!,
+                        descriptionInput.editText!!
+                    )
+                ) {
                     saveToDO()
                     findNavController().navigate(R.id.action_addFragment_to_listFragment)
                     return true
@@ -90,4 +95,8 @@ class AddFragment : Fragment(), MenuProvider {
         todoViewModel.insertData(todo)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
