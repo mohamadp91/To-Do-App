@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -80,7 +81,7 @@ class ListFragment : Fragment(), MenuProvider, SearchView.OnQueryTextListener {
 
         recyclerView.apply {
             adapter = todoAdapter
-            layoutManager = LinearLayoutManager(requireContext().applicationContext)
+            layoutManager = GridLayoutManager(requireContext().applicationContext,2)
         }
         recyclerView.itemAnimator = SlideInDownAnimator().apply {
             addDuration = 300
