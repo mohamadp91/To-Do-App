@@ -10,14 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.to_do_app.R
 import com.example.to_do_app.adapter.TodoAdapter
 import com.example.to_do_app.data.models.ToDoModel
 import com.example.to_do_app.databinding.FragmentListBinding
+import com.example.to_do_app.utils.observeOnce
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -81,7 +81,7 @@ class ListFragment : Fragment(), MenuProvider, SearchView.OnQueryTextListener {
 
         recyclerView.apply {
             adapter = todoAdapter
-            layoutManager = GridLayoutManager(requireContext().applicationContext,2)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
         recyclerView.itemAnimator = SlideInDownAnimator().apply {
             addDuration = 300
@@ -146,7 +146,7 @@ class ListFragment : Fragment(), MenuProvider, SearchView.OnQueryTextListener {
 
     private fun searchThoughDataBase(query: String) {
         val searchQuery = "%$query%"
-        toDoViewModel.searchSearchToDo(searchQuery).observe(this) {
+        toDoViewModel.searchSearchToDo(searchQuery).observeOnce(viewLifecycleOwner) {
             todoAdapter.toDoList = it
         }
 
@@ -155,10 +155,10 @@ class ListFragment : Fragment(), MenuProvider, SearchView.OnQueryTextListener {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.menu_delete_all -> confirmDeleteAll()
-            R.id.sortByHigh -> toDoViewModel.sortByHighPriority.observe(this) {
+            R.id.sortByHigh -> toDoViewModel.sortByHighPriority.observe(viewLifecycleOwner) {
                 todoAdapter.toDoList = it
             }
-            R.id.sortByLow -> toDoViewModel.sortByLowPriority.observe(this) {
+            R.id.sortByLow -> toDoViewModel.sortByLowPriority.observe(viewLifecycleOwner) {
                 todoAdapter.toDoList = it
             }
         }
