@@ -58,6 +58,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    // recycler view animations
+    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
+
     //     Room db
     //noinspection GradleDependency
     implementation "androidx.room:room-ktx:2.4.2"

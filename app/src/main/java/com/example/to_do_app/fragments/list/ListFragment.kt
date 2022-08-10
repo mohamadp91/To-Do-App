@@ -3,6 +3,7 @@ package com.example.to_do_app.fragments.list
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -19,6 +20,8 @@ import com.example.to_do_app.databinding.FragmentListBinding
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
 import com.google.android.material.snackbar.Snackbar
+import jp.wasabeef.recyclerview.animators.LandingAnimator
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 
 class ListFragment : Fragment(), MenuProvider {
 
@@ -80,6 +83,10 @@ class ListFragment : Fragment(), MenuProvider {
             adapter = todoAdapter
             layoutManager = LinearLayoutManager(requireContext().applicationContext)
         }
+        recyclerView.itemAnimator = SlideInDownAnimator().apply {
+            addDuration = 300
+        }
+
         swipeToDeleteItem(recyclerView)
     }
 

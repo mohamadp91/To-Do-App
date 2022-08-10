@@ -2,6 +2,7 @@ package com.example.to_do_app.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.to_do_app.data.models.ToDoModel
 import com.example.to_do_app.databinding.TodoItemBinding
@@ -10,8 +11,10 @@ class TodoAdapter : RecyclerView.Adapter<TodoAdapter.TodoHolder>() {
 
     var toDoList = emptyList<ToDoModel>()
         set(value) {
+            val toDoDiffUtils = ToDoDiffUtils(toDoList, value)
+            val result = DiffUtil.calculateDiff(toDoDiffUtils)
             field = value
-            notifyDataSetChanged()
+            result.dispatchUpdatesTo(this)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoHolder {
