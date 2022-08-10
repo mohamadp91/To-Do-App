@@ -3,8 +3,8 @@ package com.example.to_do_app.fragments.list
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.view.animation.OvershootInterpolator
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,10 +20,9 @@ import com.example.to_do_app.databinding.FragmentListBinding
 import com.example.to_do_app.viewmodels.SharedViewModel
 import com.example.to_do_app.viewmodels.ToDoViewModel
 import com.google.android.material.snackbar.Snackbar
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 
-class ListFragment : Fragment(), MenuProvider {
+class ListFragment : Fragment(), MenuProvider, SearchView.OnQueryTextListener {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -122,6 +121,34 @@ class ListFragment : Fragment(), MenuProvider {
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.list_menu, menu)
+
+        val searchItem = menu.findItem(R.id.app_bar_search)
+        val searchView = searchItem.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchThoughDataBase(query)
+        }
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        println(newText)
+        if (newText != null) {
+            searchThoughDataBase(newText)
+        }
+        return true
+    }
+
+    private fun searchThoughDataBase(query: String) {
+        val searchQuery = "%$query%"
+        toDoViewModel.searchSearchToDo(searchQuery).observe(this) {
+            todoAdapter.toDoList = it
+        }
+
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
