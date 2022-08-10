@@ -154,6 +154,12 @@ class ListFragment : Fragment(), MenuProvider, SearchView.OnQueryTextListener {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.menu_delete_all -> confirmDeleteAll()
+            R.id.sortByHigh -> toDoViewModel.sortByHighPriority.observe(this) {
+                todoAdapter.toDoList = it
+            }
+            R.id.sortByLow -> toDoViewModel.sortByLowPriority.observe(this) {
+                todoAdapter.toDoList = it
+            }
         }
         return false
     }
